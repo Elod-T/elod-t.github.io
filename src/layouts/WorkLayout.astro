@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Contact from "../components/Contact.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import WorkCard from "../components/WorkCard.astro";
+
+type Props = {
+  work: CollectionEntry<"work">;
+  includeHeader?: boolean;
+  includeFooter?: boolean;
+  includeContact?: boolean;
+  class?: any;
+};
+
+const {
+  work,
+  includeHeader = true,
+  includeFooter = true,
+  includeContact = true,
+  class: className,
+  ...rest
+} = Astro.props;
+
+console.log(work);
+---
+
+<html lang="en">
+  <head>
+    <BaseHead />
+  </head>
+
+  <body>
+    {includeHeader && <Header />}
+
+    <main class:list={["py-20", className]} {...rest}>
+      <article>
+        <div class="custom-container mx-auto mb-10">
+          <FormattedDate
+            date={work.data.pubDate}
+            transition:name={`${work.data.title}-date`}
+          />
+          {
+            work.data.updatedDate && (
+              <div>
+                Last updated on <FormattedDate date={work.data.updatedDate} />
+              </div>
+            )
+          }
+
+          <h1
+            class="text-4xl md:text-5xl font-bold"
+            transition:name={`${work.data.title}-title`}
+          >
+            {work.data.title}
+          </h1>
+          <p class="max-w-prose mt-4">{work.data.description}</p>
+
+          <div class="flex gap-x-2 mt-2">
+            {
+              work.data.technologies.map((tech) => (
+                <div class="badge badge-primary">{tech}</div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div
+          class="custom-container mx-auto max-w-prose flex flex-col gap-y-10 items-center"
+        >
+          <WorkCard work={work} imageOnly={true} class="max-w-prose" />
+
+          <slot />
+        </div>
+      </article>
+    </main>
+
+    {includeContact && <Contact />}
+
+    {includeFooter && <Footer />}
+  </body>
+</html>

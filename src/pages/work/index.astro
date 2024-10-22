@@ -1,0 +1,41 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import { getCollection } from "astro:content";
+import WorkCard from "../../components/WorkCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const works = (await getCollection("work")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const first = works[0];
+const rest = works.slice(1);
+---
+
+<BaseLayout>
+  <h1 class="text-5xl text-center font-bold mb-20" transition:name="title">
+    Work
+  </h1>
+
+  <section>
+    {
+      first ? (
+        <WorkCard work={first} />
+      ) : (
+        <h1 class="text-2xl font-bold">No relevant work</h1>
+      )
+    }
+    <ul class="grid grid-cols-2 gap-6 md:gap-8">
+      {
+        rest.map((work) => (
+          <li>
+            <WorkCard {work} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

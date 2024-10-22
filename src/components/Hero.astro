@@ -1,0 +1,35 @@
+---
+import { person } from "../consts";
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<section class:list={["grid md:grid-cols-2 items-center", className]} {...rest}>
+  <div class="flex flex-col gap-y-4">
+    <h1 class="text-5xl font-bold" transition:name="title">
+      Hello, my name is {person.name}
+    </h1>
+    <p>{person.bio}</p>
+    <div class="flex gap-x-2">
+      {
+        person.skillBadges.map((title) => (
+          <div class="badge hover:scale-110 duration-200">{title}</div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="relative max-w-xs max-md:mx-auto md:ml-auto">
+    <div
+      id="backdrop"
+      class="absolute w-[102%] h-[91%] bg-base-300 rounded-3xl -z-10 top-14 left-4"
+    >
+    </div>
+
+    <img
+      class="rounded-3xl relative hover:scale-105 duration-200"
+      src={person.portraitUrl}
+      alt=""
+      transition:name="pfp"
+    />
+  </div>
+</section>

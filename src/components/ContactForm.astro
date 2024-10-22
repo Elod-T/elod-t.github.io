@@ -1,0 +1,60 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<section class:list={["w-full max-w-prose", className]} {...rest}>
+  <form id="contactForm" class="flex flex-col gap-y-4">
+    <h3 id="contact" class="text-3xl font-bold">Contact me</h3>
+
+    <div class="flex flex-col gap-y-2">
+      <label class="form-control w-full">
+        <div class="label">
+          <span class="label-text">Subject</span>
+        </div>
+        <input
+          id="subjectInput"
+          type="text"
+          placeholder="Type here"
+          class="input input-bordered w-full"
+        />
+      </label>
+
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">Message</span>
+        </div>
+        <textarea
+          id="messageInput"
+          class="textarea textarea-bordered h-24"
+          placeholder="Type here..."
+          required></textarea>
+      </label>
+
+      <button class="btn btn-block">
+        Send
+        <Icon name="tabler:send" />
+      </button>
+    </div>
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById("contactForm");
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const subject = document.getElementById("subjectInput");
+    const message = document.getElementById("messageInput");
+
+    if (!subject || !message) return;
+
+    // @ts-ignore
+    const mailto = `mailto:tobakelod@gmail.com?Subject=${subject.value}&body=${message.value}`;
+    window.open(mailto);
+
+    // @ts-ignore
+    form.reset();
+  });
+</script>

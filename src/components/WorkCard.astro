@@ -1,0 +1,82 @@
+---
+import { isVideo } from "../utils";
+import path from "path";
+import FormattedDate from "./FormattedDate.astro";
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  work: CollectionEntry<"work">;
+  imageOnly?: boolean;
+  class?: any;
+};
+
+const { work, imageOnly, class: className, ...rest } = Astro.props;
+---
+
+<a
+  href={imageOnly ? "" : `/work/${work.slug}/`}
+  class:list={[
+    (imageOnly ? "pointer-events-none " : "") + "block group",
+    className,
+  ]}
+  {...rest}
+  data-astro-prefetch
+>
+  <div class="relative aspect-[16/9] overflow-hidden rounded-lg shadow-lg">
+    {
+      work.data.heroImage ? (
+        isVideo(work.data.heroImage) ? (
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            controls={false}
+            class="w-full h-full object-cover transform transition-transform group-hover:scale-105"
+            transition:name={`${work.data.title}-heroImage`}
+            transition:persist
+          >
+            <source
+              src={work.data.heroImage}
+              type={`video/${path.extname(work.data.heroImage).substring(1)}`}
+            />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <img
+            src={work.data.heroImage}
+            alt=""
+            class="w-full h-full object-cover object-top transform transition-transform group-hover:scale-105"
+            transition:name={`${work.data.title}-heroImage`}
+          />
+        )
+      ) : (
+        <div
+          class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
+          transition:name={`${work.data.title}-heroImage`}
+        >
+          <span>No Image Available</span>
+        </div>
+      )
+    }
+  </div>
+
+  {
+    !imageOnly && (
+      <>
+        <h4
+          class="mt-4 text-xl font-semibold text-gray-800 group-hover:text-primary transition-colors"
+          transition:name={`${work.data.title}-title`}
+        >
+          {work.data.title}
+        </h4>
+        <p class="mt-1 text-sm text-gray-500">
+          <FormattedDate
+            date={work.data.pubDate}
+            transition:name={`${work.data.title}-date`}
+          />
+        </p>
+      </>
+    )
+  }
+</a>

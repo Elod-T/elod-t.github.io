@@ -1,0 +1,21 @@
+---
+import { person, icons } from "../consts";
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<section class:list={["grid md:grid-flow-col gap-10", className]} {...rest}>
+  {
+    person.skillHighlights.map((skill) => (
+      <div class="card bg-base-100 shadow-xl hover:scale-110 duration-200">
+        <div class="card-body text-sm">
+          <div class="w-8 h-8">
+            <Fragment set:html={icons[skill.icon]} />
+          </div>
+          <h2 class="card-title">{skill.title}</h2>
+          <p>{skill.description}</p>
+        </div>
+      </div>
+    ))
+  }
+</section>

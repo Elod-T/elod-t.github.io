@@ -1,0 +1,39 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+type Props = {
+  includeHeader?: boolean;
+  includeFooter?: boolean;
+  includeContact?: boolean;
+  class?: any;
+};
+
+const {
+  includeHeader = true,
+  includeFooter = true,
+  includeContact = true,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead />
+  </head>
+  <body>
+    {includeHeader && <Header />}
+
+    <main class:list={["custom-container mx-auto py-20", className]} {...rest}>
+      <slot />
+    </main>
+
+    {includeContact && <Contact />}
+
+    {includeFooter && <Footer />}
+  </body>
+</html>
